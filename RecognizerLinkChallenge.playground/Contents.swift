@@ -3,40 +3,50 @@
 import UIKit
 
 extension String {
+	/// An alias for a empty string.
 	static var empty: String {
 		return String()
 	}
 
+	/// An alias for a white space string.
 	static var whiteSpace: String {
 		return " "
 	}
 
+	/// An alias for a dash string.
 	static var dash: String {
 		return "-"
 	}
 
+	/// An alias for a slash string.
 	static var slash: String {
 		return "/"
 	}
 
+	/// The pattern for an regular expression that matches with an url and separate each slash value inside an capture group.
 	static var urlPattern: String {
 		return "https?:\\/\\/([\\w.]+)(\\/[\\w-]*)(\\/[\\w-]+)?(\\/[\\w-]+)?(\\/[\\w-]+)?(\\/[\\w-]+)?(?:[\\/?+][\\w=+]+)?"
 	}
 }
 
 extension String {
+	/// Get the total range of a string.
 	var range: NSRange {
 		return NSRange(location: 0, length: characters.count)
 	}
 
+	/// Remove all slash caracters.
 	var normalizedCapture: String {
 		return stringByReplacingOccurrencesOfString(.slash, withString: .empty)
 	}
 
+	/// Process a given string to check whether it match of our ```urlPattern```.
+	/// - Returns: An list with all value captured when matched with our regex.
 	var processedCaptureGroups: [String] {
 		guard let regex = try? NSRegularExpression(pattern: .urlPattern, options: NSRegularExpressionOptions.CaseInsensitive),
 			match = regex.firstMatchInString(self, options: NSMatchingOptions(), range: self.range) else { return [] }
 
+		// When i = 0, the captured group is equal the original input string.
 		var i = 1
 		var captureGroups = [String]()
 
@@ -52,7 +62,9 @@ extension String {
 }
 
 extension String {
-	func wordOnRange(range: NSRange) -> String {
+	/// Get the substring in a given range value.
+	/// - Returns: The substring located in the inputed ```range```.
+	func substringOnRange(range: NSRange) -> String {
 		let nsString = self as NSString
 
 		return nsString.substringWithRange(range)
@@ -60,17 +72,20 @@ extension String {
 }
 
 extension NSRange {
+	/// Checks whether an ```NSRange``` value is not empty, when it is valid, location and length values are different of zero.
 	var isNotEmpty: Bool {
 		return (location >= 0) && (length > 0)
 	}
 }
 
 extension NSRange {
+	/// Translate the range in a substring inside the ```string``` input.
 	func translate(string: String) -> String {
-		return string.wordOnRange(self)
+		return string.substringOnRange(self)
 	}
 }
 
+/// The basic amount of data to conceive an product item.
 struct Item {
 	var id: Int
 	var title: String
@@ -80,10 +95,10 @@ struct Item {
 }
 
 extension Item {
-    var identifier: String {
-        return String(id)
-    }
-    
+	var identifier: String {
+		return String(id)
+	}
+
 	var normalizedTitle: String {
 		return title.lowercaseString.stringByReplacingOccurrencesOfString(.whiteSpace, withString: .dash)
 	}
@@ -98,7 +113,7 @@ extension Item {
 }
 
 extension Item {
-
+	/// Checks whether a given url matches with a product url registered in our databases.
 	func isProductLink(urlToCompare: String) -> Bool {
 		let captureGroups = urlToCompare.processedCaptureGroups
 
@@ -111,15 +126,15 @@ extension Item {
 		}
 
 		guard equalValues.count <= 1 else { return true }
-        
-        var itensFounded = 0
 
-        for c in captureGroups {
-            itensFounded += c.containsString(normalizedTitle) ? 1 : 0
-            itensFounded += c.containsString(identifier) ? 1 : 0
-        }
-        
-        return itensFounded >= 2
+		var itensFounded = 0
+
+		for c in captureGroups {
+			itensFounded += c.containsString(normalizedTitle) ? 1 : 0
+			itensFounded += c.containsString(identifier) ? 1 : 0
+		}
+
+		return itensFounded >= 2
 	}
 }
 
