@@ -2,6 +2,44 @@
 
 import UIKit
 
+let start = NSDate()
+
+extension Array where Element: Item {
+	/// Process a list of ```Item``` to check it each one is a valid product link.
+	/// - Returns: The number of founded valid product link.
+	static func processItems(items: [Element], seeLogs: Bool) -> Int {
+		var count = 0
+
+		for i in items {
+			for u in i.urlsToCheck {
+				let status = i.isProductLink(u) ? "~" : "<>"
+
+				count += i.isProductLink(u) ? 1 : 0
+
+				guard seeLogs else { continue }
+
+				print("\(u) \n\t \(status) \(i.link)\n")
+			}
+		}
+
+		return count
+	}
+}
+
+extension NSRange {
+	/// Checks whether an ```NSRange``` value is not empty, when it is valid, location and length values are different of zero.
+	var isNotEmpty: Bool {
+		return (location >= 0) && (length > 0)
+	}
+}
+
+extension NSRange {
+	/// Translate the range in a substring inside the ```string``` input.
+	func translate(string: String) -> String {
+		return string.substringOnRange(self)
+	}
+}
+
 extension String {
 	/// An alias for a empty string.
 	static var empty: String {
@@ -68,20 +106,6 @@ extension String {
 		let nsString = self as NSString
 
 		return nsString.substringWithRange(range)
-	}
-}
-
-extension NSRange {
-	/// Checks whether an ```NSRange``` value is not empty, when it is valid, location and length values are different of zero.
-	var isNotEmpty: Bool {
-		return (location >= 0) && (length > 0)
-	}
-}
-
-extension NSRange {
-	/// Translate the range in a substring inside the ```string``` input.
-	func translate(string: String) -> String {
-		return string.substringOnRange(self)
 	}
 }
 
@@ -182,28 +206,6 @@ private extension ProductItem {
 	}
 }
 
-extension Array where Element: Item {
-	/// Process a list of ```Item``` to check it each one is a valid product link.
-	/// - Returns: The number of founded valid product link.
-	static func processItems(items: [Element], seeLogs: Bool) -> Int {
-		var count = 0
-
-		for i in items {
-			for u in i.urlsToCheck {
-				let status = i.isProductLink(u) ? "~" : "<>"
-
-				count += i.isProductLink(u) ? 1 : 0
-
-				guard seeLogs else { continue }
-
-				print("\(u) \n\t \(status) \(i.link)\n")
-			}
-		}
-
-		return count
-	}
-}
-
 // MARK: Main
 
 let itemsToTest = [
@@ -231,3 +233,9 @@ let itemsToTest = [
 let result = ProductItem.run(itemsToTest, expected: 6, seeLogs: true)
 
 print(result)
+
+let end = NSDate()
+
+let total = end.timeIntervalSinceDate(start)
+
+print("All process occured in \(total) seconds.")
