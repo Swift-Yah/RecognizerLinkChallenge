@@ -90,6 +90,9 @@ http://www.lojadoze.com.br/categoria-teste
 http://www.lojadoze.com.br/chapeu-caipira-de-palha-desfiado?google
 ```
 
+## Linguagem a ser adotada?
+* Temos certa preferência à PHP, pois é nossa linguagem mais usada no momento, mas o que queremos entender é somente a SUA lógica de programação para resolução do desafio, a linguagem é somente uma ferramenta, nós queremos acima de tudo a pessoa.
+
 ## Deve conter
 
 * Reconhecedor de links de produtos de acordo com o XML da loja e os links de requests informados.
