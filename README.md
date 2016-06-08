@@ -1,5 +1,7 @@
 # RecognizerLinkChallenge
 
+[![ReviewNinja](https://app.review.ninja/60657741/badge)](https://app.review.ninja/Swift-Yah/RecognizerLinkChallenge)
+
 Reconhecimento de Estruturas de Links.
 
 ## Desafio da Shopback
