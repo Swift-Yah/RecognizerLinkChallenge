@@ -238,4 +238,4 @@ let end = NSDate()
 
 let total = end.timeIntervalSinceDate(start)
 
-print("All process occured in \(total) seconds.")
+print("\nAll process occured in \(total) seconds.")
