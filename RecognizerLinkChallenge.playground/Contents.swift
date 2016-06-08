@@ -183,24 +183,28 @@ private extension ProductItem {
 }
 
 extension Array where Element: Item {
+	/// Process a list of ```Item``` to check it each one is a valid product link.
+	/// - Returns: The number of founded valid product link.
 	static func processItems(items: [Element], seeLogs: Bool) -> Int {
 		var count = 0
 
 		for i in items {
 			for u in i.urlsToCheck {
-				let status = i.isProductLink(u) ? "is" : "is not"
+				let status = i.isProductLink(u) ? "~" : "<>"
 
 				count += i.isProductLink(u) ? 1 : 0
 
 				guard seeLogs else { continue }
 
-				print("Your requested link \(u) \(status) a product link for the base link \(i.link)")
+				print("\(u) \n\t \(status) \(i.link)\n")
 			}
 		}
 
 		return count
 	}
 }
+
+// MARK: Main
 
 let itemsToTest = [
 	ProductItem(id: 16599221, title: "Produto de Teste 1", price: 100.00, link: "http://www.lojadojoao.com.br/p/16599221", urlsToCheck: [
@@ -224,4 +228,6 @@ let itemsToTest = [
 	])
 ]
 
-ProductItem.run(itemsToTest, expected: 6, seeLogs: true)
+let result = ProductItem.run(itemsToTest, expected: 6, seeLogs: true)
+
+print(result)
